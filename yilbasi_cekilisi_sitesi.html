@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎄 Yılbaşı Çekilişi 🎁</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    p {
+      opacity: 0.85;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: none;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ff512f, #dd2476);
+      color: white;
+      margin-top: 8px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 15px;
+      max-height: 140px;
+      overflow-y: auto;
+    }
+
+    li {
+      background: rgba(255,255,255,0.12);
+      padding: 8px 12px;
+      border-radius: 10px;
+      margin-bottom: 6px;
+    }
+
+    .winner {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffd700;
+      animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 8px #ffd700; }
+      to { text-shadow: 0 0 18px #ffea00; }
+    }
+
+    .music-btn {
+      background: linear-gradient(135deg, #36d1dc, #5b86e5);
+      margin-top: 14px;
+    }
+
+    footer {
+      margin-top: 18px;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+  
+    /* Kar Efekti */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      color: white;
+      user-select: none;
+      pointer-events: none;
+      font-size: 1em;
+      animation: fall linear infinite;
+      z-index: 9999;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+      }
+    }
+
+    /* Konfeti */
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background-color: red;
+      animation: confetti-fall 2s linear forwards;
+      z-index: 10000;
+    }
+
+    @keyframes confetti-fall {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🎄 Yılbaşı Çekilişi 🎁</h1>
+    <p>İsimleri ekle, müzik eşliğinde kazananı belirle!</p>
+
+    <input type="text" id="nameInput" placeholder="İsim gir" />
+    <button onclick="addName()">İsmi Ekle</button>
+
+    <ul id="nameList"></ul>
+
+    <button onclick="drawWinner()">🎉 Çekilişi Yap</button>
+    <div id="winner" class="winner"></div>
+
+    <button class="music-btn" onclick="toggleMusic()">🎶 Yılbaşı Müziğini Başlat</button>
+
+    <footer>Mutlu yıllar! ❄️</footer>
+  </div>
+
+  <!-- Yılbaşı müziği (örnek telifsiz parça) -->
+  <audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/audio/2022/12/21/audio_4a0d3b2c36.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    const names = [];
+    const listEl = document.getElementById('nameList');
+    const winnerEl = document.getElementById('winner');
+    const music = document.getElementById('bgMusic');
+
+    function addName() {
+      const input = document.getElementById('nameInput');
+      const value = input.value.trim();
+      if (!value) return;
+      names.push(value);
+      const li = document.createElement('li');
+      li.textContent = value;
+      listEl.appendChild(li);
+      input.value = '';
+    }
+
+    function drawWinner() {
+      if (names.length === 0) {
+        winnerEl.textContent = 'Önce isim eklemelisin 🎅';
+        return;
+      }
+      const randomIndex = Math.floor(Math.random() * names.length);
+      const winner = names[randomIndex];
+      winnerEl.textContent = `🎊 Kazanan: ${winner} 🎊`;
+      launchConfetti();
+    }
+      const randomIndex = Math.floor(Math.random() * names.length);
+      const winner = names[randomIndex];
+      winnerEl.textContent = `🎊 Kazanan: ${winner} 🎊`;
+    }
+
+    function toggleMusic() {
+      if (music.paused) {
+        music.play();
+      } else {
+        music.pause();
+      }
+    }
+  
+    // Kar oluşturma
+    function createSnowflake() {
+      const snowflake = document.createElement('div');
+      snowflake.classList.add('snowflake');
+      snowflake.textContent = '❄';
+      snowflake.style.left = Math.random() * window.innerWidth + 'px';
+      snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+      snowflake.style.animationDuration = Math.random() * 4 + 8 + 's';
+      document.body.appendChild(snowflake);
+
+      setTimeout(() => snowflake.remove(), 8000);
+    }
+
+    setInterval(createSnowflake, 500);
+
+    // Konfeti patlatma
+    function launchConfetti() {
+      for (let i = 0; i < 80; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.top = '-10px';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        document.body.appendChild(confetti);
+
+        setTimeout(() => confetti.remove(), 2000);
+      }
+    }
+  </script>
+</body>
+</html>
